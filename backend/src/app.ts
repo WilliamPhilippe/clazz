@@ -6,19 +6,24 @@ import routes from './routes';
 import './database';
 
 class App {
-  constructor() {
+  public server: express.Application;
+
+  public constructor() {
     this.server = express();
 
     this.middlewares();
     this.routes();
   }
 
-  middlewares() {
+  private middlewares(): void {
     this.server.use(cors());
     this.server.use(express.json());
   }
 
-  routes() {
+  private routes(): void {
+    // this.server.post('/users', (req, res) => {
+    //   return res.json({ ok: true });
+    // });
     this.server.use(routes);
   }
 }
