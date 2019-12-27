@@ -9,7 +9,5 @@ module.exports = {
   port: 5433,
   define: {
     timestamps: true,
-    underscored: true,
-    underscoredAll: true,
   },
 };

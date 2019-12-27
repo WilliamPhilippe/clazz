@@ -1,21 +1,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('User', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      first_name: {
+      firstName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      last_name: {
+      lastName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      teacher_user: {
+      teacherUser: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false,
@@ -30,12 +30,12 @@ module.exports = {
         defaultValue: 'pt',
         allowNull: false,
       },
-      pro_user: {
+      proUser: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false,
       },
-      password_hash: {
+      passwordHash: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -47,11 +47,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },

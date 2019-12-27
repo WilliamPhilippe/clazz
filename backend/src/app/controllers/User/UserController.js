@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as Yup from 'yup';
 
 import { Op } from 'sequelize';
@@ -7,14 +8,14 @@ import User from '../../models/User';
 class UserController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      first_name: Yup.string().required(),
-      last_name: Yup.string().required(),
-      teacher_user: Yup.bool(),
+      firstName: Yup.string().required(),
+      lastName: Yup.string().required(),
+      teacherUser: Yup.bool(),
       country: Yup.string()
         .max(3)
         .min(3),
       language: Yup.string().min(2),
-      pro_user: Yup.bool(),
+      proUser: Yup.bool(),
       password: Yup.string()
         .required()
         .min(6),
@@ -38,17 +39,17 @@ class UserController {
       },
     });
 
-    if (detectUser) {
-      return res.status(400).json({
-        error: 'Email or username already in use.',
-        email: detectUser.email === email ? email : null,
-        username: detectUser.username === username ? username : null,
-      });
-    }
+    // if (detectUser) {
+    //   return res.status(400).json({
+    //     error: 'Email or username already in use.',
+    //     email: detectUser.email === email ? email : null,
+    //     username: detectUser.username === username ? username : null,
+    //   });
+    // }
 
-    const { id, first_name } = await User.create(req.body);
+    // const { id, firstName } = await User.create(req.body);
 
-    return res.status(200).json({ id, first_name });
+    return res.status(200).json({ ok: true });
   }
 }
 

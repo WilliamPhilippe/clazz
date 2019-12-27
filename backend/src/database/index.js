@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import Sequelize from 'sequelize';
 
 import User from '../app/models/User';
