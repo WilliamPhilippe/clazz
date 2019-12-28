@@ -51,6 +51,10 @@ class UserController {
 
     return res.status(200).json({ id, firstName });
   }
+
+  async update(req: Request, res: Response): Promise<Response> {
+    return res.json({ ok: true });
+  }
 }
 
 export default new UserController();
