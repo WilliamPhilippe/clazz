@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { Request, Response } from 'express';
 import * as Yup from 'yup';
 
 import { Op } from 'sequelize';
@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
 import User from '../../models/User';
 
 class UserController {
-  async store(req, res) {
+  async store(req: Request, res: Response): Promise<Response> {
     const schema = Yup.object().shape({
       firstName: Yup.string().required(),
       lastName: Yup.string().required(),
@@ -33,23 +33,23 @@ class UserController {
     }
 
     const { username, email } = req.body;
-    const detectUser = await User.findOne({
+    const detectUser: User = await User.findOne({
       where: {
         [Op.or]: [{ username }, { email }],
       },
     });
 
-    // if (detectUser) {
-    //   return res.status(400).json({
-    //     error: 'Email or username already in use.',
-    //     email: detectUser.email === email ? email : null,
-    //     username: detectUser.username === username ? username : null,
-    //   });
-    // }
+    if (detectUser) {
+      return res.status(400).json({
+        error: 'Email or username already in use.',
+        email: detectUser.email === email ? email : null,
+        username: detectUser.username === username ? username : null,
+      });
+    }
 
-    // const { id, firstName } = await User.create(req.body);
+    const { id, firstName }: User = await User.create(req.body);
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ id, firstName });
   }
 }
 
