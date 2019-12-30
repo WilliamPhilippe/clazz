@@ -30,16 +30,9 @@ class User extends Model {
 
   public readonly updatedAt!: Date;
 
-  public checkPassword(): string {
-    return 'checked';
+  public checkPassword(password: string): boolean {
+    return bcrypt.compare(password, this.passwordHash);
   }
-
-  //   this.addHook('beforeSave', async user => {
-  //     if (user.password) {
-  //       user.passwordHash = await bcrypt.hash(user.password, 8);
-  //     }
-  //   });
-  // }
 }
 
 User.init(

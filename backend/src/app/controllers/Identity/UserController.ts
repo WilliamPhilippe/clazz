@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import * as Yup from 'yup';
 
 import { Op } from 'sequelize';
+
+import { RequestC as Request } from '../../util/Interfaces';
+
+import CODE from '../../util/CodeIntegration';
 
 import User from '../../models/User';
 
@@ -29,7 +33,9 @@ class UserController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validations fails.' });
+      return res
+        .status(400)
+        .json({ error: CODE.err.session.VALIDATION_FAILURE });
     }
 
     const { username, email } = req.body;
@@ -41,9 +47,10 @@ class UserController {
 
     if (detectUser) {
       return res.status(400).json({
-        error: 'Email or username already in use.',
-        email: detectUser.email === email ? email : null,
-        username: detectUser.username === username ? username : null,
+        error:
+          detectUser.email === email
+            ? CODE.warn.profile.EMAIL_IN_USE
+            : CODE.warn.profile.USERNAME_IN_USE,
       });
     }
 
@@ -53,7 +60,7 @@ class UserController {
   }
 
   async update(req: Request, res: Response): Promise<Response> {
-    return res.json({ ok: true });
+    return res.json({ ok: 'update user', user: req.user });
   }
 }
 
