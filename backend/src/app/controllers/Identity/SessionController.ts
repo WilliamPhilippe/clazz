@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-
+import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 
@@ -11,28 +11,36 @@ import authConfig from '../../../config/auth';
 class SessionController {
   async store(req: Request, res: Response): Promise<Response> {
     const schema = Yup.object().shape({
-      email: Yup.string()
-        .email()
-        .required(),
+      accessKey: Yup.string().required(),
       password: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: CODE.err.VALIDATION_FAILURE });
+      return res
+        .status(400)
+        .json({ error: CODE.err.session.VALIDATION_FAILURE });
     }
 
     const { body }: Request = req;
 
-    const checkUser: User = await User.findOne({
-      where: { email: body.email },
-    });
+    let checkUser: User;
+    try {
+      checkUser = await User.findOne({
+        where: {
+          [Op.or]: [{ email: body.accessKey }, { username: body.accessKey }],
+        },
+      });
+    } catch (err) {
+      return res.status(500).json({ error: CODE.err.intern.INTERNAL_DB_ERROR });
+    }
+
     if (!checkUser) {
       return res
         .status(401)
         .json({ error: CODE.err.session.CREDENTIAL_FAILURE });
     }
 
-    if (!checkUser.checkPassword(body.password)) {
+    if (!(await checkUser.checkPassword(body.password))) {
       return res
         .status(401)
         .json({ error: CODE.err.session.CREDENTIAL_FAILURE });
@@ -62,10 +70,6 @@ class SessionController {
         expiresIn: authConfig.expiresIn,
       }),
     });
-  }
-
-  async update(req: Request, res: Response): Promise<Response> {
-    return res.json({ ok: true });
   }
 }
 

@@ -30,7 +30,7 @@ class User extends Model {
 
   public readonly updatedAt!: Date;
 
-  public checkPassword(password: string): boolean {
+  public async checkPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.passwordHash);
   }
 }
