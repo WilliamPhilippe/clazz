@@ -1,11 +1,35 @@
-import React from 'react';
-import {Text} from 'react-native';
+import React, {ReactNode} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-const App: () => React$Node = () => {
+import {Text, View} from 'react-native';
+
+const Stack = createStackNavigator();
+
+const Login = ({navigation}) => {
   return (
-    <>
-      <Text>teste</Text>
-    </>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>LoginScreen</Text>
+    </View>
+  );
+};
+
+function DetailsScreen() {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Details Screen</Text>
+    </View>
+  );
+}
+
+const App: () => ReactNode = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} options={{}} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
